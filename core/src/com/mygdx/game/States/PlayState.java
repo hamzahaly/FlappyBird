@@ -11,10 +11,12 @@ import com.mygdx.game.FlappyDemo;
 public class PlayState extends State {
 
     private Texture bird;
+    private Texture background;
 
     protected PlayState(GameStateManager gsm) {
         super(gsm);
         bird = new Texture("bird.png");
+        background = new Texture("bg.png");
         cam.setToOrtho(false, FlappyDemo.WIDTH / 2, FlappyDemo.HEIGHT / 2);
     }
 
@@ -31,6 +33,7 @@ public class PlayState extends State {
     public void render(SpriteBatch spriteBatch) {
         spriteBatch.setProjectionMatrix(cam.combined);
         spriteBatch.begin();
+        spriteBatch.draw(background, cam.position.x - (cam.viewportWidth / 2), 0);
         spriteBatch.draw(bird, 50, 50);
         spriteBatch.end();
 
