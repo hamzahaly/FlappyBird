@@ -7,6 +7,8 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.FlappyDemo;
 import com.mygdx.game.States.Enemy;
 
+import java.sql.Time;
+
 /**
  * Created by Hamzah on 4/25/2016.
  */
@@ -26,7 +28,8 @@ public class PlayState extends State {
 
     @Override
     protected void handleInput() {
-
+        //Handle the input of touching an enemy
+        //How to handle touching a specific area i.e. specifically the enemy texture
     }
 
     @Override
@@ -42,10 +45,20 @@ public class PlayState extends State {
         spriteBatch.draw(enemy.getTexture(), enemy.getPosition().x, enemy.getPosition().y);
         spriteBatch.end();
 
+        if (TimeUtils.millis() - enemy.getSpawnTime() >= 10000) {
+            //Destroy the enemy because the countdown has reached 10 seconds.
+
+        }
+
+        //if the enemy is touched between 0 and 5 seconds of spawning then their score is low
+        //if the enemy is touched between 5 and 7 seconds, their score is higher
+        //if the enemy is touched after 9 seconds or as close to 10 seconds to spawning then they get the highest score
+        //Convert the difference to a measurable score
     }
 
     @Override
     public void dispose() {
+        //Dispose of all of the assets
 
     }
 }
