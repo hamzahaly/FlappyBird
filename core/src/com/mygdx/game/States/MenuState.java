@@ -3,7 +3,10 @@ package com.mygdx.game.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.FlappyDemo;
+
+import java.sql.Time;
 
 /**
  * Created by Hamzah on 4/25/2016.
@@ -12,11 +15,16 @@ public class MenuState extends State {
 
     private Texture background;
     private Texture playBtn;
+    private long spawnTime;
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
         background = new Texture("bg.png");
         playBtn = new Texture("playbtn.png");
+        spawnTime = TimeUtils.millis();
+        System.out.println(spawnTime);
+        spawnTime = TimeUtils.millisToNanos(spawnTime);
+        System.out.println(spawnTime);
     }
 
     @Override
@@ -24,6 +32,10 @@ public class MenuState extends State {
         if(Gdx.input.justTouched()) {
             gsm.set(new PlayState(gsm));
             dispose();
+            spawnTime = TimeUtils.millis();
+            System.out.println(spawnTime);
+            spawnTime = TimeUtils.millisToNanos(spawnTime);
+            System.out.println(spawnTime);
         }
     }
 
