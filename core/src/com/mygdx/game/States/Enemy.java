@@ -1,6 +1,8 @@
 package com.mygdx.game.States;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -11,7 +13,10 @@ public class Enemy {
 
     private Vector3 position;
     private long spawnTime;
+    private int maxHealth = 500;
+    private int health = maxHealth;
     private Texture enemy;
+    private HealthBar healthBar;
 
     //Basic Enemy Type
     public Enemy(int x, int y) {
@@ -19,11 +24,18 @@ public class Enemy {
         enemy = new Texture("bird.png");
         spawnTime = TimeUtils.millis();
         System.out.println(spawnTime);
+        healthBar = new HealthBar(this, new Texture("enemyhealthbg.png"), new Texture("enemyhealthfg.png"));
     }
 
-    public void update(float dt) {
+    public void update() {
         spawnTime = TimeUtils.millis();
         System.out.println(spawnTime);
+        healthBar.update();
+    }
+
+    public void render(Batch batch) {
+        healthBar.render(batch);
+
     }
 
     public Vector3 getPosition() {
@@ -36,6 +48,44 @@ public class Enemy {
 
     public long getSpawnTime() {
         return spawnTime;
+    }
+
+    private class HealthBar {
+        private Sprite healthBarBG;
+        private Sprite healthBarFG;
+        private Enemy owner;
+        private final short buffer = 20;
+
+        public HealthBar(Enemy owner, Texture healthBG, Texture healthFG) {
+            this.owner = owner;
+
+            healthBarBG = new Sprite(healthBG);
+            healthBarFG = new Sprite(healthFG);
+
+            healthBarBG.setX(owner.getPosition().x);
+            healthBarBG.setY(owner.getPosition().y + buffer);
+
+            healthBarFG.setX(owner.getPosition().x);
+            healthBarFG.setY(owner.getPosition().y + buffer);
+
+            healthBarFG.setOrigin(0, 0);
+        }
+
+        public void update() {
+            healthBarBG.setX(owner.getPosition().x);
+            healthBarBG.setY(owner.getPosition().y + buffer);
+
+            healthBarFG.setX(owner.getPosition().x);
+            healthBarFG.setY(owner.getPosition().y + buffer);
+
+            healthBarFG.setScale(owner.health / (float) owner.maxHealth, 1f);
+        }
+
+        public void render(Batch batch) {
+            healthBarFG.draw(batch);
+            healthBarBG.draw(batch);
+        }
+
     }
 
 }

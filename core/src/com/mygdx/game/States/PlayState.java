@@ -45,8 +45,11 @@ public class PlayState extends State {
         spriteBatch.draw(enemy.getTexture(), enemy.getPosition().x, enemy.getPosition().y);
         spriteBatch.end();
 
-        if (TimeUtils.millis() - enemy.getSpawnTime() >= 10000) {
-            //Destroy the enemy because the countdown has reached 10 seconds.
+        enemy.update();
+
+        if (TimeUtils.millis() - enemy.getSpawnTime() >= 5000) {
+            //Destroy the enemy because the countdown has reached 5 seconds.
+            //Create a UI element that simulates time
 
         }
 
