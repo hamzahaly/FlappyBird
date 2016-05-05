@@ -9,14 +9,12 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.FlappyDemo;
 import com.mygdx.game.States.Enemy;
 
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-
 import java.sql.Time;
 
 /**
  * Created by Hamzah on 4/25/2016.
  */
-public class PlayState extends State {
+public class PlayState extends State  {
 
     private Texture bird;
     private Texture background;
@@ -59,24 +57,33 @@ public class PlayState extends State {
 
         }
 
+        touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+
         if(Gdx.input.justTouched()) {
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+
+
             cam.unproject(touchPos);
-            float x = Gdx.input.getX();
-            float y = Gdx.input.getY();
-            System.out.println(enemy.getPosition().x);
-            System.out.println(enemy.getPosition().y);
-            System.out.println(enemy.getPosition().x + 20);
-            System.out.println(enemy.getPosition().y + 20);
-            System.out.println(Gdx.input.getX());
-            System.out.println(Gdx.input.getY());
+            float x = touchPos.x;
+            float y = touchPos.y;
+
+            System.out.println(x);
+            System.out.println(y);
             float enemyWidth = enemy.getTexture().getWidth();
             float enemyHeight = enemy.getTexture().getHeight();
 
-            if ((x >= enemy.getPosition().x && x <= enemy.getPosition().x + 20) || (y >= enemy.getPosition().y && y <= enemy.getPosition().y + 20) ) {
-                System.out.println("touched enemy");
-            }
+            float enemyWidthEnd = (float) enemy.getPosition().x + enemyWidth; //Get position and add the width to get coordinate at the right most of the image
+            float enemyHeightEnd = (float) enemy.getPosition().y + enemyHeight; //Get position and add the height to get coordinate at the top of the image
+            System.out.println("Enemy Width is at: " + enemyWidthEnd);
+            System.out.println("Enemy Height is at: " + enemyHeightEnd);
             System.out.println("just touched");
+            boolean yes = y <= enemyHeight;
+            System.out.println(yes);
+            // If x (the touchpoint) is greater than or equal to the lower left of the image (100) AND if x is less than the right most
+            // of the image.
+            // If y is greater than or equal to the lower left point and less than or equal to the top.
+            if ((x >= enemyWidth && x <= enemyWidthEnd) && (y <= enemyHeight && y >= enemyHeightEnd)) {
+                System.out.println("Enemy is Touched!");
+            }
         }
         //if the enemy is touched between 0 and 5 seconds of spawning then their score is low
         //if the enemy is touched between 5 and 7 seconds, their score is higher
