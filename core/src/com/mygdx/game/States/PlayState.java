@@ -66,23 +66,23 @@ public class PlayState extends State  {
             float x = touchPos.x;
             float y = touchPos.y;
 
-            System.out.println(x);
-            System.out.println(y);
-            float enemyWidth = enemy.getTexture().getWidth();
-            float enemyHeight = enemy.getTexture().getHeight();
+//            System.out.println(x);
+//            System.out.println(y);
+            float enemyWidth = enemy.getPosition().x;
+            float enemyHeight = enemy.getPosition().y;
 
-            float enemyWidthEnd = (float) enemy.getPosition().x + enemyWidth; //Get position and add the width to get coordinate at the right most of the image
-            float enemyHeightEnd = (float) enemy.getPosition().y + enemyHeight; //Get position and add the height to get coordinate at the top of the image
-            System.out.println("Enemy Width is at: " + enemyWidthEnd);
-            System.out.println("Enemy Height is at: " + enemyHeightEnd);
-            System.out.println("just touched");
-            boolean yes = y <= enemyHeight;
-            System.out.println(yes);
-            // If x (the touchpoint) is greater than or equal to the lower left of the image (100) AND if x is less than the right most
-            // of the image.
-            // If y is greater than or equal to the lower left point and less than or equal to the top.
-            if ((x >= enemyWidth && x <= enemyWidthEnd) && (y <= enemyHeight && y >= enemyHeightEnd)) {
+            float enemyWidthEnd = (float) enemy.getPosition().x + enemy.getTexture().getWidth(); //Get position and add the width to get coordinate at the right most of the image
+            float enemyHeightEnd = (float) enemy.getPosition().y + enemy.getTexture().getHeight(); //Get position and add the height to get coordinate at the top of the image
+//            System.out.println("Enemy Width is at: " + enemyWidthEnd);
+//            System.out.println("Enemy Height is at: " + enemyHeightEnd);
+//            System.out.println("just touched");
+//            System.out.println(enemyHeight);
+
+            //System.out.println(y <= enemyHeight);
+
+            if ((x >= enemyWidth && x <= enemyWidthEnd) && (y >= enemyHeight && y <= enemyHeightEnd)) {
                 System.out.println("Enemy is Touched!");
+
             }
         }
         //if the enemy is touched between 0 and 5 seconds of spawning then their score is low
