@@ -78,17 +78,17 @@ public class PlayState extends State  {
 //            System.out.println("just touched");
 //            System.out.println(enemyHeight);
 
-            //System.out.println(y <= enemyHeight);
-
             if ((x >= enemyWidth && x <= enemyWidthEnd) && (y >= enemyHeight && y <= enemyHeightEnd)) {
                 System.out.println("Enemy is Touched!");
+                
+                //if the enemy is touched between 0 and 5 seconds of spawning then their score is low
+                //if the enemy is touched between 5 and 7 seconds, their score is higher
+                //if the enemy is touched after 9 seconds or as close to 10 seconds to spawning then they get the highest score
+                //As time passes, subtract from the health pool.
+                //Convert the difference to a measurable score
 
             }
         }
-        //if the enemy is touched between 0 and 5 seconds of spawning then their score is low
-        //if the enemy is touched between 5 and 7 seconds, their score is higher
-        //if the enemy is touched after 9 seconds or as close to 10 seconds to spawning then they get the highest score
-        //Convert the difference to a measurable score
     }
 
     @Override
