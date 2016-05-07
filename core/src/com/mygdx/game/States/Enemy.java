@@ -29,29 +29,13 @@ public class Enemy {
 
     public void update() {
         spawnTime = TimeUtils.millis();
-        System.out.println(spawnTime);
+        //System.out.println(spawnTime);
         healthBar.update();
     }
 
     public void render(Batch batch) {
         healthBar.render(batch);
 
-    }
-
-    public HealthBar getHealthBar() {
-        return healthBar;
-    }
-
-    public Vector3 getPosition() {
-        return position;
-    }
-
-    public Texture getTexture() {
-        return enemy;
-    }
-
-    public long getSpawnTime() {
-        return spawnTime;
     }
 
     private class HealthBar {
@@ -66,21 +50,21 @@ public class Enemy {
             healthBarBG = new Sprite(healthBG);
             healthBarFG = new Sprite(healthFG);
 
-            healthBarBG.setX(owner.getPosition().x);
-            healthBarBG.setY(owner.getPosition().y + buffer);
+            healthBarBG.setX(100);
+            healthBarBG.setY(100);
 
-            healthBarFG.setX(owner.getPosition().x);
-            healthBarFG.setY(owner.getPosition().y + buffer);
+            healthBarFG.setX(100);
+            healthBarFG.setY(100);
 
             healthBarFG.setOrigin(0, 0);
         }
 
         public void update() {
-            healthBarBG.setX(owner.getPosition().x);
-            healthBarBG.setY(owner.getPosition().y + buffer);
+            healthBarBG.setX(100);
+            healthBarBG.setY(100);
 
-            healthBarFG.setX(owner.getPosition().x);
-            healthBarFG.setY(owner.getPosition().y + buffer);
+            healthBarFG.setX(100);
+            healthBarFG.setY(100);
 
             healthBarFG.setScale(owner.health / (float) owner.maxHealth, 1f);
         }
@@ -90,6 +74,18 @@ public class Enemy {
             healthBarBG.draw(batch);
         }
 
+    }
+
+    public Vector3 getPosition() {
+        return position;
+    }
+
+    public Texture getTexture() {
+        return enemy;
+    }
+
+    public long getSpawnTime() {
+        return spawnTime;
     }
 
 }
