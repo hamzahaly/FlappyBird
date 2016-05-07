@@ -38,6 +38,10 @@ public class Enemy {
 
     }
 
+    public HealthBar getHealthBar() {
+        return healthBar;
+    }
+
     public Vector3 getPosition() {
         return position;
     }
