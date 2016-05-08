@@ -23,8 +23,6 @@ public class MenuState extends State {
         playBtn = new Texture("playbtn.png");
         spawnTime = TimeUtils.millis();
         System.out.println(spawnTime);
-        spawnTime = TimeUtils.millisToNanos(spawnTime);
-        System.out.println(spawnTime);
     }
 
     @Override
@@ -33,8 +31,6 @@ public class MenuState extends State {
             gsm.set(new PlayState(gsm));
             dispose();
             spawnTime = TimeUtils.millis();
-            System.out.println(spawnTime);
-            spawnTime = TimeUtils.millisToNanos(spawnTime);
             System.out.println(spawnTime);
         }
     }

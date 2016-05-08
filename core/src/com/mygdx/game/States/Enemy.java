@@ -19,17 +19,14 @@ public class Enemy {
     private HealthBar healthBar;
 
     //Basic Enemy Type
-    public Enemy(int x, int y) {
+    public Enemy(int x, int y, long spawn) {
         position = new Vector3(x, y, 0);
         enemy = new Texture("bird.png");
-        spawnTime = TimeUtils.millis();
-        System.out.println(spawnTime);
+        spawnTime = spawn;
         healthBar = new HealthBar(this, new Texture("enemyhealthbg.png"), new Texture("enemyhealthfg.png"));
     }
 
     public void update() {
-        spawnTime = TimeUtils.millis();
-        //System.out.println(spawnTime);
         healthBar.update();
     }
 
@@ -76,6 +73,9 @@ public class Enemy {
 
     }
 
+    public HealthBar getHealthBar() {
+        return healthBar;
+    }
     public Vector3 getPosition() {
         return position;
     }
