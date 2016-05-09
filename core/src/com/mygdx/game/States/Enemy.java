@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import java.sql.Time;
+
 /**
  * Created by iguest on 4/28/16.
  */
@@ -13,8 +15,8 @@ public class Enemy {
 
     private Vector3 position;
     private long spawnTime;
-    private int maxHealth = 500;
-    private int health = maxHealth;
+    private int maxHealth = 7000;
+    private long health = maxHealth;
     private Texture enemy;
     private HealthBar healthBar;
 
@@ -31,6 +33,8 @@ public class Enemy {
     }
 
     public void render(Batch batch) {
+        long time = TimeUtils.millis();
+        health = maxHealth - (time - spawnTime);
         healthBar.render(batch);
 
     }
@@ -75,9 +79,6 @@ public class Enemy {
 
     }
 
-    public HealthBar getHealthBar() {
-        return healthBar;
-    }
     public Vector3 getPosition() {
         return position;
     }

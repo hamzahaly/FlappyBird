@@ -71,6 +71,10 @@ public class PlayState extends State  {
             enemy.update();
             touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 
+            if (TimeUtils.millis() - enemy.getSpawnTime() >= 7000) {
+                iterator.remove();
+            }
+
             if(Gdx.input.justTouched()) {
 
                 cam.unproject(touchPos);
