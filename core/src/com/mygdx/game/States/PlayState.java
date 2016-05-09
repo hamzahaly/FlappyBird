@@ -3,17 +3,19 @@ package com.mygdx.game.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.FlappyDemo;
 import com.mygdx.game.States.Enemy;
 
-import java.util.Random;
+import java.util.Iterator;
 
 
 /**
- * Created by Hamzah on 4/25/2016.
+ * Created by Hamzah on 4/50/2016.
  */
 public class PlayState extends State  {
 
@@ -39,6 +41,7 @@ public class PlayState extends State  {
     @Override
     protected void handleInput() {
         //Handle the input of touching an enemy
+
     }
 
     @Override
@@ -48,76 +51,121 @@ public class PlayState extends State  {
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        int xPos;
-        int yPos;
         spriteBatch.setProjectionMatrix(cam.combined);
         spriteBatch.begin();
         spriteBatch.draw(background, cam.position.x - (cam.viewportWidth / 2), 0);
 //        spriteBatch.draw(enemy.getTexture(), enemy.getPosition().x, enemy.getPosition().y);
         for (Enemy enemy: enemies) {
-            Random random = new Random();
-            int num = random.nextInt(3);
-            if (num == 0) {
-                xPos = 100;
-                yPos = 100;
-            } else if (num == 1) {
-                xPos = 200;
-                yPos = 200;
-            } else if (num == 2) {
-                xPos = 100;
-                yPos = 200;
-            } else {
-                xPos = 200;
-                yPos = 100;
-            }
-            spriteBatch.draw(enemy.getTexture(), xPos, yPos);
+            spriteBatch.draw(enemy.getTexture(), enemy.getPosition().x, enemy.getPosition().y);
         }
         spriteBatch.end();
 
-        enemy.update();
+        if (enemies.size < 4) {
+            spawnEnemy();
+        }
 
-        touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        Iterator<Enemy> iterator = enemies.iterator();
+        while(iterator.hasNext()) {
+            Enemy enemy = iterator.next();
+            enemy.render(spriteBatch);
+            enemy.update();
+            touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 
-        if(Gdx.input.justTouched()) {
+            if(Gdx.input.justTouched()) {
 
+                cam.unproject(touchPos);
+                float x = touchPos.x;
+                float y = touchPos.y;
 
-            cam.unproject(touchPos);
-            float x = touchPos.x;
-            float y = touchPos.y;
+                float enemyWidth = enemy.getPosition().x;
+                float enemyHeight = enemy.getPosition().y;
 
-            float enemyWidth = enemy.getPosition().x;
-            float enemyHeight = enemy.getPosition().y;
+                float enemyWidthEnd = enemy.getPosition().x + enemy.getTexture().getWidth();
+                float enemyHeightEnd = enemy.getPosition().y + enemy.getTexture().getHeight();
 
-            float enemyWidthEnd = enemy.getPosition().x + enemy.getTexture().getWidth();
-            float enemyHeightEnd = enemy.getPosition().y + enemy.getTexture().getHeight();
+                long currentTime = TimeUtils.millis();
+                long timePassed = currentTime - enemy.getSpawnTime();
+                if ((x >= enemyWidth && x <= enemyWidthEnd) && (y >= enemyHeight && y <= enemyHeightEnd)) {
+                    System.out.println("Enemy is Touched!");
 
-            long currentTime = TimeUtils.millis();
-            long timePassed = currentTime - enemy.getSpawnTime();
-            if ((x >= enemyWidth && x <= enemyWidthEnd) && (y >= enemyHeight && y <= enemyHeightEnd)) {
-                System.out.println("Enemy is Touched!");
+                    // Can add damage to enemy class.
+                    // Can add health which correlates to time to enemy class
+                    if (timePassed >= 7000) {
+                        System.out.println(points);
+                        System.out.println(currentTime);
+                        System.out.println(enemy.getSpawnTime());
+                        System.out.println(currentTime - enemy.getSpawnTime());
+                        System.out.println("You touched the enemy after 7 seconds");
+                        playerHealthPoints -= 20;
+                        iterator.remove();
 
-                // Can add damage to enemy class.
-                // Can add health which correlates to time to enemy class
-                if (timePassed >= 7000) {
-                    System.out.println(currentTime - enemy.getSpawnTime());
-                    System.out.println("You touched the enemy after 7 seconds");
-                    playerHealthPoints -= 20;
+                    } else {
+                        points += timePassed / 1000.0;
+                        //if the points is within 1 second of the time limit for the enemy, give extra points.
+                        if (currentTime - enemy.getSpawnTime() <= 750) {
+                            points += 1000;
+                        }
+                        if (currentTime - enemy.getSpawnTime() >= 3500) {
+                            playerHealthPoints -= 10;
+                        }
+                        System.out.println(points);
+                        System.out.println(currentTime);
+                        System.out.println(enemy.getSpawnTime());
+                        System.out.println(currentTime - enemy.getSpawnTime());
+                        System.out.println("You touched the enemy before 7 seconds of spawning");
+                        // destroy enemy
+                        iterator.remove();
+                    }
 
-                } else {
-                    points = timePassed / 1000.0;
-                    //if the points is within 1 second of the time limit for the enemy, give extra points.
-                    System.out.println(points);
-                    System.out.println(currentTime - enemy.getSpawnTime());
-                    System.out.println("You touched the enemy before 7 seconds of spawning");
-                    // destroy enemy
                 }
-
             }
         }
+//        enemy.update();
+
+//        touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+//
+//        if(Gdx.input.justTouched()) {
+//
+//
+//            cam.unproject(touchPos);
+//            float x = touchPos.x;
+//            float y = touchPos.y;
+//
+//            float enemyWidth = enemy.getPosition().x;
+//            float enemyHeight = enemy.getPosition().y;
+//
+//            float enemyWidthEnd = enemy.getPosition().x + enemy.getTexture().getWidth();
+//            float enemyHeightEnd = enemy.getPosition().y + enemy.getTexture().getHeight();
+//
+//            long currentTime = TimeUtils.millis();
+//            long timePassed = currentTime - enemy.getSpawnTime();
+//            if ((x >= enemyWidth && x <= enemyWidthEnd) && (y >= enemyHeight && y <= enemyHeightEnd)) {
+//                System.out.println("Enemy is Touched!");
+//
+//                // Can add damage to enemy class.
+//                // Can add health which correlates to time to enemy class
+//                if (timePassed >= 7000) {
+//                    System.out.println(currentTime - enemy.getSpawnTime());
+//                    System.out.println("You touched the enemy after 7 seconds");
+//                    playerHealthPoints -= 20;
+//
+//                } else {
+//                    points = timePassed / 1000.0;
+//                    //if the points is within 1 second of the time limit for the enemy, give extra points.
+//                    System.out.println(points);
+//                    System.out.println(currentTime - enemy.getSpawnTime());
+//                    System.out.println("You touched the enemy before 7 seconds of spawning");
+//                    // destroy enemy
+//                }
+//
+//            }
+//        }
     }
 
     private void spawnEnemy() {
-        Enemy enemy = new Enemy(100, 100, TimeUtils.millis());
+        int xPos = MathUtils.random(50, 200);
+        int yPos = MathUtils.random(50, 200);
+        Enemy enemy = new Enemy(xPos, yPos, TimeUtils.millis());
         enemies.add(enemy);
     }
 

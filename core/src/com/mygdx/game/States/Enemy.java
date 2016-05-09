@@ -47,28 +47,30 @@ public class Enemy {
             healthBarBG = new Sprite(healthBG);
             healthBarFG = new Sprite(healthFG);
 
-            healthBarBG.setX(100);
-            healthBarBG.setY(100);
+            healthBarBG.setX(getPosition().x);
+            healthBarBG.setY(getPosition().y);
 
-            healthBarFG.setX(100);
-            healthBarFG.setY(100);
+            healthBarFG.setX(getPosition().x);
+            healthBarFG.setY(getPosition().y);
 
             healthBarFG.setOrigin(0, 0);
         }
 
         public void update() {
-            healthBarBG.setX(100);
-            healthBarBG.setY(100);
+            healthBarBG.setX(getPosition().x);
+            healthBarBG.setY(getPosition().y);
 
-            healthBarFG.setX(100);
-            healthBarFG.setY(100);
+            healthBarFG.setX(getPosition().x);
+            healthBarFG.setY(getPosition().y);
 
             healthBarFG.setScale(owner.health / (float) owner.maxHealth, 1f);
         }
 
         public void render(Batch batch) {
+            batch.begin();
             healthBarFG.draw(batch);
             healthBarBG.draw(batch);
+            batch.end();
         }
 
     }
