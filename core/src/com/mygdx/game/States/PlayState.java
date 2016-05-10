@@ -51,7 +51,7 @@ public class PlayState extends State  {
 
     @Override
     public void update(float dt) {
-        playerHealthBar.update();
+
     }
 
     @Override
@@ -65,7 +65,9 @@ public class PlayState extends State  {
         }
         spriteBatch.end();
 
+        playerHealthBar.update();
         playerHealthBar.render(spriteBatch);
+
         if (enemies.size < 4) {
             spawnEnemy();
         }
@@ -189,21 +191,21 @@ public class PlayState extends State  {
             healthBarBG = new Sprite(healthBG);
             healthBarFG = new Sprite(healthFG);
 
-            healthBarBG.setX(100);
-            healthBarBG.setY(750);
+            healthBarBG.setX(cam.position.x);
+            healthBarBG.setY(cam.position.y);
 
-            healthBarFG.setX(100);
-            healthBarFG.setY(750);
+            healthBarFG.setX(cam.position.x);
+            healthBarFG.setY(cam.position.y);
 
             healthBarFG.setOrigin(0, 0);
         }
 
         public void update() {
-            healthBarBG.setX(100);
-            healthBarBG.setY(750);
+            healthBarBG.setX(cam.position.x);
+            healthBarBG.setY(cam.position.y);
 
-            healthBarFG.setX(100);
-            healthBarFG.setY(750);
+            healthBarFG.setX(cam.position.x);
+            healthBarFG.setY(cam.position.y);
 
             healthBarFG.setScale(playerHealthPoints / (float) maxPlayerHealth, 1f);
         }
