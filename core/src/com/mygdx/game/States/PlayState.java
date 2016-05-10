@@ -7,11 +7,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.FlappyDemo;
-import com.mygdx.game.States.Enemy;
 
 import java.util.Iterator;
 
@@ -19,8 +17,9 @@ import java.util.Iterator;
 /**
  * Created by Hamzah on 4/50/2016.
  */
-public class PlayState extends State  {
+public class PlayState extends State {
 
+    private FlappyDemo game;
     private Texture bird;
     private Texture background;
 //  private Enemy enemy;
@@ -31,8 +30,8 @@ public class PlayState extends State  {
     private HealthBar playerHealthBar;
     private Array<Enemy> enemies;
 
-    protected PlayState(GameStateManager gsm) {
-        super(gsm);
+    protected PlayState(FlappyDemo game) {
+        this.game = game;
         bird = new Texture("bird.png");
         background = new Texture("bg.png");
         enemies = new Array<Enemy>();
@@ -80,6 +79,7 @@ public class PlayState extends State  {
             touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 
             if (TimeUtils.millis() - enemy.getSpawnTime() >= 7000) {
+                playerHealthPoints -= 20;
                 iterator.remove();
             }
 
@@ -191,26 +191,27 @@ public class PlayState extends State  {
             healthBarBG = new Sprite(healthBG);
             healthBarFG = new Sprite(healthFG);
 
-            healthBarBG.setX(cam.position.x);
-            healthBarBG.setY(cam.position.y);
+            healthBarBG.setX(50);
+            healthBarBG.setY(390);
 
-            healthBarFG.setX(cam.position.x);
-            healthBarFG.setY(cam.position.y);
+            healthBarFG.setX(50);
+            healthBarFG.setY(390);
 
             healthBarFG.setOrigin(0, 0);
         }
 
         public void update() {
-            healthBarBG.setX(cam.position.x);
-            healthBarBG.setY(cam.position.y);
+            healthBarBG.setX(50);
+            healthBarBG.setY(390);
 
-            healthBarFG.setX(cam.position.x);
-            healthBarFG.setY(cam.position.y);
+            healthBarFG.setX(50);
+            healthBarFG.setY(390);
 
             healthBarFG.setScale(playerHealthPoints / (float) maxPlayerHealth, 1f);
         }
 
         public void render(Batch batch) {
+            batch.setProjectionMatrix(cam.combined);
             batch.begin();
             healthBarFG.draw(batch);
             healthBarBG.draw(batch);
