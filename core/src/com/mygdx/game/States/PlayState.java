@@ -2,6 +2,8 @@ package com.mygdx.game.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -24,7 +26,9 @@ public class PlayState extends State  {
 //  private Enemy enemy;
     private Vector3 touchPos;
     private double points;
-    private int playerHealthPoints;
+    private long maxPlayerHealth = 150;
+    private long playerHealthPoints = maxPlayerHealth;
+    private HealthBar playerHealthBar;
     private Array<Enemy> enemies;
 
     protected PlayState(GameStateManager gsm) {
@@ -35,6 +39,7 @@ public class PlayState extends State  {
         cam.setToOrtho(false, FlappyDemo.WIDTH / 2, FlappyDemo.HEIGHT / 2);
         playerHealthPoints = 150;
         points = 0;
+        playerHealthBar = new HealthBar(new Texture("playerHealthbg.png"), new Texture("playerHealthfg.png"));
         spawnEnemy();
     }
 
@@ -46,7 +51,7 @@ public class PlayState extends State  {
 
     @Override
     public void update(float dt) {
-
+        playerHealthBar.update();
     }
 
     @Override
@@ -60,6 +65,7 @@ public class PlayState extends State  {
         }
         spriteBatch.end();
 
+        playerHealthBar.render(spriteBatch);
         if (enemies.size < 4) {
             spawnEnemy();
         }
@@ -173,6 +179,43 @@ public class PlayState extends State  {
         enemies.add(enemy);
     }
 
+    private class HealthBar {
+        private Sprite healthBarBG;
+        private Sprite healthBarFG;
+        private final short buffer = 20;
+
+        public HealthBar(Texture healthBG, Texture healthFG) {
+
+            healthBarBG = new Sprite(healthBG);
+            healthBarFG = new Sprite(healthFG);
+
+            healthBarBG.setX(100);
+            healthBarBG.setY(750);
+
+            healthBarFG.setX(100);
+            healthBarFG.setY(750);
+
+            healthBarFG.setOrigin(0, 0);
+        }
+
+        public void update() {
+            healthBarBG.setX(100);
+            healthBarBG.setY(750);
+
+            healthBarFG.setX(100);
+            healthBarFG.setY(750);
+
+            healthBarFG.setScale(playerHealthPoints / (float) maxPlayerHealth, 1f);
+        }
+
+        public void render(Batch batch) {
+            batch.begin();
+            healthBarFG.draw(batch);
+            healthBarBG.draw(batch);
+            batch.end();
+        }
+
+    }
     @Override
     public void dispose() {
         //Dispose of all of the assets
