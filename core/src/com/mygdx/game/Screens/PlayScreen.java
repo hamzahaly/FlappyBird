@@ -1,29 +1,32 @@
-package com.mygdx.game.states;
+package com.mygdx.game.Screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.FlappyDemo;
-import com.mygdx.game.States.Enemy;
-
+import com.mygdx.game.Sprites.Enemy;
 import java.util.Iterator;
 
-
 /**
- * Created by Hamzah on 4/50/2016.
+ * Created by iguest on 5/10/16.
  */
-public class PlayState extends State  {
+public class PlayScreen implements Screen {
+    private FlappyDemo game;
 
-    private Texture bird;
+    private OrthographicCamera gamecam;
+    private Viewport gamePort;
     private Texture background;
-//  private Enemy enemy;
     private Vector3 touchPos;
     private double points;
     private long maxPlayerHealth = 150;
@@ -31,42 +34,49 @@ public class PlayState extends State  {
     private HealthBar playerHealthBar;
     private Array<Enemy> enemies;
 
-    protected PlayState(GameStateManager gsm) {
-        super(gsm);
-        bird = new Texture("bird.png");
+
+    public PlayScreen(FlappyDemo game) {
+        this.game = game;
+        gamecam = new OrthographicCamera();
+        gamePort = new FitViewport(FlappyDemo.WIDTH / 2, FlappyDemo.HEIGHT / 2, gamecam);
         background = new Texture("bg.png");
         enemies = new Array<Enemy>();
-        cam.setToOrtho(false, FlappyDemo.WIDTH / 2, FlappyDemo.HEIGHT / 2);
+        gamecam.setToOrtho(false, FlappyDemo.WIDTH / 2, FlappyDemo.HEIGHT / 2);
         playerHealthPoints = 150;
         points = 0;
         playerHealthBar = new HealthBar(new Texture("playerHealthbg.png"), new Texture("playerHealthfg.png"));
         spawnEnemy();
     }
-
     @Override
-    protected void handleInput() {
-        //Handle the input of touching an enemy
+    public void show() {
 
     }
 
-    @Override
+    public void handleInput(float dt) {
+
+    }
+
     public void update(float dt) {
-
+        handleInput(dt);
     }
 
     @Override
-    public void render(SpriteBatch spriteBatch) {
-        spriteBatch.setProjectionMatrix(cam.combined);
-        spriteBatch.begin();
-        spriteBatch.draw(background, cam.position.x - (cam.viewportWidth / 2), 0);
+    public void render(float delta) {
+        update(delta);
+        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        game.batch.setProjectionMatrix(gamecam.combined);
+
+        game.batch.begin();
+        game.batch.draw(background, gamecam.position.x - (gamecam.viewportWidth / 2), 0);
 //        spriteBatch.draw(enemy.getTexture(), enemy.getPosition().x, enemy.getPosition().y);
         for (Enemy enemy: enemies) {
-            spriteBatch.draw(enemy.getTexture(), enemy.getPosition().x, enemy.getPosition().y);
+            game.batch.draw(enemy.getTexture(), enemy.getPosition().x, enemy.getPosition().y);
         }
-        spriteBatch.end();
+        game.batch.end();
 
         playerHealthBar.update();
-        playerHealthBar.render(spriteBatch);
+        playerHealthBar.render(game.batch);
 
         if (enemies.size < 4) {
             spawnEnemy();
@@ -75,17 +85,18 @@ public class PlayState extends State  {
         Iterator<Enemy> iterator = enemies.iterator();
         while(iterator.hasNext()) {
             Enemy enemy = iterator.next();
-            enemy.render(spriteBatch);
+            enemy.render(game.batch);
             enemy.update();
             touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 
             if (TimeUtils.millis() - enemy.getSpawnTime() >= 7000) {
+                playerHealthPoints -= 20;
                 iterator.remove();
             }
 
-            if(Gdx.input.justTouched()) {
+            if (Gdx.input.justTouched()) {
 
-                cam.unproject(touchPos);
+                gamecam.unproject(touchPos);
                 float x = touchPos.x;
                 float y = touchPos.y;
 
@@ -132,46 +143,26 @@ public class PlayState extends State  {
                 }
             }
         }
-//        enemy.update();
+    }
 
-//        touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-//
-//        if(Gdx.input.justTouched()) {
-//
-//
-//            cam.unproject(touchPos);
-//            float x = touchPos.x;
-//            float y = touchPos.y;
-//
-//            float enemyWidth = enemy.getPosition().x;
-//            float enemyHeight = enemy.getPosition().y;
-//
-//            float enemyWidthEnd = enemy.getPosition().x + enemy.getTexture().getWidth();
-//            float enemyHeightEnd = enemy.getPosition().y + enemy.getTexture().getHeight();
-//
-//            long currentTime = TimeUtils.millis();
-//            long timePassed = currentTime - enemy.getSpawnTime();
-//            if ((x >= enemyWidth && x <= enemyWidthEnd) && (y >= enemyHeight && y <= enemyHeightEnd)) {
-//                System.out.println("Enemy is Touched!");
-//
-//                // Can add damage to enemy class.
-//                // Can add health which correlates to time to enemy class
-//                if (timePassed >= 7000) {
-//                    System.out.println(currentTime - enemy.getSpawnTime());
-//                    System.out.println("You touched the enemy after 7 seconds");
-//                    playerHealthPoints -= 20;
-//
-//                } else {
-//                    points = timePassed / 1000.0;
-//                    //if the points is within 1 second of the time limit for the enemy, give extra points.
-//                    System.out.println(points);
-//                    System.out.println(currentTime - enemy.getSpawnTime());
-//                    System.out.println("You touched the enemy before 7 seconds of spawning");
-//                    // destroy enemy
-//                }
-//
-//            }
-//        }
+    @Override
+    public void resize(int width, int height) {
+        gamePort.update(width, height);
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
     }
 
     private void spawnEnemy() {
@@ -191,26 +182,27 @@ public class PlayState extends State  {
             healthBarBG = new Sprite(healthBG);
             healthBarFG = new Sprite(healthFG);
 
-            healthBarBG.setX(cam.position.x);
-            healthBarBG.setY(cam.position.y);
+            healthBarBG.setX(50);
+            healthBarBG.setY(390);
 
-            healthBarFG.setX(cam.position.x);
-            healthBarFG.setY(cam.position.y);
+            healthBarFG.setX(50);
+            healthBarFG.setY(390);
 
             healthBarFG.setOrigin(0, 0);
         }
 
         public void update() {
-            healthBarBG.setX(cam.position.x);
-            healthBarBG.setY(cam.position.y);
+            healthBarBG.setX(50);
+            healthBarBG.setY(390);
 
-            healthBarFG.setX(cam.position.x);
-            healthBarFG.setY(cam.position.y);
+            healthBarFG.setX(50);
+            healthBarFG.setY(390);
 
             healthBarFG.setScale(playerHealthPoints / (float) maxPlayerHealth, 1f);
         }
 
         public void render(Batch batch) {
+            batch.setProjectionMatrix(gamecam.combined);
             batch.begin();
             healthBarFG.draw(batch);
             healthBarBG.draw(batch);
@@ -218,9 +210,9 @@ public class PlayState extends State  {
         }
 
     }
+
     @Override
     public void dispose() {
-        //Dispose of all of the assets
 
     }
 }
