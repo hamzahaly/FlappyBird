@@ -17,6 +17,7 @@ public class Enemy {
     private long spawnTime;
     private int maxHealth = 7000;
     private long health = maxHealth;
+    //private int damage;
     private Texture enemy;
     private HealthBar healthBar;
 

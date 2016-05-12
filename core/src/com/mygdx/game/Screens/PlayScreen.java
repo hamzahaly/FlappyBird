@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.FlappyDemo;
+import com.mygdx.game.Scenes.SpawnArray;
 import com.mygdx.game.Sprites.Enemy;
 import java.util.Iterator;
 
@@ -33,6 +34,7 @@ public class PlayScreen implements Screen {
     private long playerHealthPoints = maxPlayerHealth;
     private HealthBar playerHealthBar;
     private Array<Enemy> enemies;
+    private SpawnArray spawnArray;
 
 
     public PlayScreen(FlappyDemo game) {
@@ -45,6 +47,7 @@ public class PlayScreen implements Screen {
         playerHealthPoints = 150;
         points = 0;
         playerHealthBar = new HealthBar(new Texture("playerHealthbg.png"), new Texture("playerHealthfg.png"));
+        spawnArray = new SpawnArray();
         spawnEnemy();
     }
     @Override
@@ -136,12 +139,14 @@ public class PlayScreen implements Screen {
                         System.out.println(enemy.getSpawnTime());
                         System.out.println(currentTime - enemy.getSpawnTime());
                         System.out.println("You touched the enemy before 7 seconds of spawning");
-                        // destroy enemy
                         iterator.remove();
                     }
 
                 }
             }
+        }
+        if (playerHealthPoints <= 0) {
+            game.setScreen(new GameoverScreen(game));
         }
     }
 
@@ -166,8 +171,13 @@ public class PlayScreen implements Screen {
     }
 
     private void spawnEnemy() {
-        int xPos = MathUtils.random(50, 200);
-        int yPos = MathUtils.random(50, 200);
+        System.out.println("size: " + spawnArray.getSize());
+        int r = MathUtils.random(0, 30);
+        Vector3 pos = spawnArray.getPosition(r);
+        int xPos = (int) pos.x;
+        int yPos = (int) pos.y;
+        System.out.println("X-POS: " + xPos);
+        System.out.println("Y-POS: " + yPos);
         Enemy enemy = new Enemy(xPos, yPos, TimeUtils.millis());
         enemies.add(enemy);
     }
