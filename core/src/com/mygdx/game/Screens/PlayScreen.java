@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.FlappyDemo;
+import com.mygdx.game.Scenes.Hud;
 import com.mygdx.game.Scenes.SpawnArray;
 import com.mygdx.game.Sprites.Enemy;
 import java.util.Iterator;
@@ -35,6 +36,7 @@ public class PlayScreen implements Screen {
     private HealthBar playerHealthBar;
     private Array<Enemy> enemies;
     private SpawnArray spawnArray;
+    private Hud hud;
 
 
     public PlayScreen(FlappyDemo game) {
@@ -48,8 +50,10 @@ public class PlayScreen implements Screen {
         points = 0;
         playerHealthBar = new HealthBar(new Texture("playerHealthbg.png"), new Texture("playerHealthfg.png"));
         spawnArray = new SpawnArray();
+        hud = new Hud(game.batch);
         spawnEnemy();
     }
+
     @Override
     public void show() {
 
@@ -68,6 +72,8 @@ public class PlayScreen implements Screen {
         update(delta);
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         game.batch.setProjectionMatrix(gamecam.combined);
 
         game.batch.begin();
@@ -77,6 +83,8 @@ public class PlayScreen implements Screen {
             game.batch.draw(enemy.getTexture(), enemy.getPosition().x, enemy.getPosition().y);
         }
         game.batch.end();
+
+        hud.stage.draw();
 
         playerHealthBar.update();
         playerHealthBar.render(game.batch);
@@ -124,7 +132,6 @@ public class PlayScreen implements Screen {
                         System.out.println("You touched the enemy after 7 seconds");
                         playerHealthPoints -= 20;
                         iterator.remove();
-
                     } else {
                         points += timePassed / 1000.0;
                         //if the points is within 1 second of the time limit for the enemy, give extra points.
@@ -146,6 +153,7 @@ public class PlayScreen implements Screen {
             }
         }
         if (playerHealthPoints <= 0) {
+            points = 0;
             game.setScreen(new GameoverScreen(game));
         }
     }
@@ -172,12 +180,13 @@ public class PlayScreen implements Screen {
 
     private void spawnEnemy() {
         System.out.println("size: " + spawnArray.getSize());
-        int r = MathUtils.random(0, 30);
+        int r = MathUtils.random(0, 34);
         Vector3 pos = spawnArray.getPosition(r);
         int xPos = (int) pos.x;
         int yPos = (int) pos.y;
         System.out.println("X-POS: " + xPos);
         System.out.println("Y-POS: " + yPos);
+
         Enemy enemy = new Enemy(xPos, yPos, TimeUtils.millis());
         enemies.add(enemy);
     }
