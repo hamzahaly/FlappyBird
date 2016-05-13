@@ -23,7 +23,10 @@ public class Hud {
 
     Label scoreLabel;
     Label healthPoints;
-    Label succesfulHits;
+    Label failedHits;
+    Label scoreLabelTxt;
+    Label healthPointsTxt;
+    Label failedHitsTxt;
 
     public Hud(SpriteBatch batch) {
         score = 0;
@@ -47,21 +50,24 @@ public class Hud {
 
         scoreLabel = new Label("Score", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
         healthPoints = new Label("HP", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
-        succesfulHits = new Label("Success", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        failedHits = new Label("Success", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        scoreLabelTxt = new Label(String.format("%06d", score), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        healthPointsTxt = new Label(String.format("&03d", healthPoints), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
 
 
         table.add(scoreLabel).expandX();
         table.add(healthPoints).expandX();
-        table.add(succesfulHits).expandX();
+        table.add(failedHits).expandX();
         table.row(); //Creates a new row to put things under.
-
+        table.add(scoreLabelTxt).expandX();
+        table.add(healthPointsTxt).expandX();
         stage.addActor(table);
 
     }
 
     public void addScore(int value) {
         score += value;
-        scoreLabel.setText(String.format("%06d", score));
+        scoreLabelTxt.setText(String.format("%06d", score));
     }
     public void update(float dt) {
 

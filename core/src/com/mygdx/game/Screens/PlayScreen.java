@@ -30,7 +30,7 @@ public class PlayScreen implements Screen {
     private Viewport gamePort;
     private Texture background;
     private Vector3 touchPos;
-    private double points;
+    private int points;
     private long maxPlayerHealth = 150;
     private long playerHealthPoints = maxPlayerHealth;
     private HealthBar playerHealthBar;
@@ -146,6 +146,7 @@ public class PlayScreen implements Screen {
                         System.out.println(enemy.getSpawnTime());
                         System.out.println(currentTime - enemy.getSpawnTime());
                         System.out.println("You touched the enemy before 7 seconds of spawning");
+                        hud.addScore(points);
                         iterator.remove();
                     }
 
