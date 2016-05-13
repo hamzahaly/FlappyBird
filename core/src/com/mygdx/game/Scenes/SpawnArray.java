@@ -24,16 +24,18 @@ public class SpawnArray {
     }
 
     public void createArray() {
-        float heightStart = 0;
+
+        float heightStart = 100f;
         float widthStart = 0;
 
-        for (int i = 0; i < 4; i++) {
-            heightStart += enemyHeight;
-            spawnArray.add(new Vector3(heightStart, widthStart, 0));
-            for (int j = 0; j < 4; j++) {
-                widthStart += enemyWidth;
-                spawnArray.add(new Vector3(heightStart, widthStart, 0));
+        for (int i = 0; i < 5; i++) {
+            widthStart += enemyWidth;
+            spawnArray.add(new Vector3(widthStart, heightStart, 0));
+            for (int j = 0; j < 6; j++) {
+                heightStart += enemyHeight;
+                spawnArray.add(new Vector3(widthStart, heightStart, 0));
             }
+            heightStart = 100f;
         }
     }
 

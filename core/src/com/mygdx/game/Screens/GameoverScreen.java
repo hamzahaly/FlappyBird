@@ -47,8 +47,8 @@ public class GameoverScreen implements Screen {
     public void render(float delta) {
         update();
         game.batch.begin();
-        game.batch.draw(background, 0, 0, FlappyDemo.WIDTH, FlappyDemo.HEIGHT);
-        game.batch.draw(gameover, (FlappyDemo.WIDTH / 2) - (gameover.getWidth() / 2), FlappyDemo.HEIGHT / 2);
+        game.batch.draw(background, 0, 0);
+        game.batch.draw(gameover, (FlappyDemo.WIDTH / 4) - (gameover.getWidth() / 2), FlappyDemo.HEIGHT / 4);
         game.batch.end();
     }
 
