@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.Gdx;
+import com.mygdx.game.FlappyDemo;
 
 /**
  * Created by iguest on 5/10/16.
@@ -31,7 +32,7 @@ public class Hud {
     public Hud(SpriteBatch batch) {
         score = 0;
         health = 150;
-        viewport = new FitViewport(200, 100, new OrthographicCamera());
+        viewport = new FitViewport(FlappyDemo.HEIGHT / 2 , FlappyDemo.WIDTH / 2, new OrthographicCamera());
         stage = new Stage(viewport, batch);
 
 //        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("name_of_your_font_file.ttf"));
@@ -52,7 +53,7 @@ public class Hud {
         healthPoints = new Label("HP", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
         failedHits = new Label("Success", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
         scoreLabelTxt = new Label(String.format("%06d", score), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
-        healthPointsTxt = new Label(String.format("&03d", healthPoints), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        healthPointsTxt = new Label(String.format("%03d", health), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
 
 
         table.add(scoreLabel).expandX();
@@ -66,9 +67,15 @@ public class Hud {
     }
 
     public void addScore(int value) {
-        score += value;
+        score = value;
         scoreLabelTxt.setText(String.format("%06d", score));
     }
+
+    public void updateHP(int value) {
+        health = value;
+        healthPointsTxt.setText(String.format("%03d", health));
+    }
+
     public void update(float dt) {
 
     }

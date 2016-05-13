@@ -31,12 +31,14 @@ public class PlayScreen implements Screen {
     private Texture background;
     private Vector3 touchPos;
     private int points;
-    private long maxPlayerHealth = 150;
-    private long playerHealthPoints = maxPlayerHealth;
+    private int maxPlayerHealth = 150;
+    private int playerHealthPoints = maxPlayerHealth;
     private HealthBar playerHealthBar;
     private Array<Enemy> enemies;
     private SpawnArray spawnArray;
     private Hud hud;
+    private int enemiesSize;
+    private int perfectHits;
 
 
     public PlayScreen(FlappyDemo game) {
@@ -48,6 +50,7 @@ public class PlayScreen implements Screen {
         gamecam.setToOrtho(false, FlappyDemo.WIDTH / 2, FlappyDemo.HEIGHT / 2);
         playerHealthPoints = 150;
         points = 0;
+        enemiesSize = 4;
         playerHealthBar = new HealthBar(new Texture("playerHealthbg.png"), new Texture("playerHealthfg.png"));
         spawnArray = new SpawnArray();
         hud = new Hud(game.batch);
@@ -89,7 +92,7 @@ public class PlayScreen implements Screen {
         playerHealthBar.update();
         playerHealthBar.render(game.batch);
 
-        if (enemies.size < 4) {
+        if (enemies.size < enemiesSize) {
             spawnEnemy();
         }
 
@@ -100,8 +103,10 @@ public class PlayScreen implements Screen {
             enemy.update();
             touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 
+            // Player misses an enemy target.
             if (TimeUtils.millis() - enemy.getSpawnTime() >= 7000) {
                 playerHealthPoints -= 20;
+                hud.updateHP(playerHealthPoints);
                 iterator.remove();
             }
 
@@ -120,8 +125,6 @@ public class PlayScreen implements Screen {
                 long currentTime = TimeUtils.millis();
                 long timePassed = currentTime - enemy.getSpawnTime();
                 if ((x >= enemyWidth && x <= enemyWidthEnd) && (y >= enemyHeight && y <= enemyHeightEnd)) {
-                    System.out.println("Enemy is Touched!");
-
                     // Can add damage to enemy class.
                     // Can add health which correlates to time to enemy class
                     if (timePassed >= 7000) {
@@ -129,17 +132,21 @@ public class PlayScreen implements Screen {
                         System.out.println(currentTime);
                         System.out.println(enemy.getSpawnTime());
                         System.out.println(currentTime - enemy.getSpawnTime());
-                        System.out.println("You touched the enemy after 7 seconds");
                         playerHealthPoints -= 20;
                         iterator.remove();
                     } else {
                         points += timePassed / 1000.0;
                         //if the points is within 1 second of the time limit for the enemy, give extra points.
-                        if (currentTime - enemy.getSpawnTime() <= 750) {
-                            points += 1000;
+                        if (currentTime - enemy.getSpawnTime() >= 6250) {
+                            points += 100;
+                            perfectHits++;
+                            if (perfectHits % 5.0 == 0.0) {
+                                enemiesSize++;
+                            }
                         }
-                        if (currentTime - enemy.getSpawnTime() >= 3500) {
+                        if (currentTime - enemy.getSpawnTime() <= 3500) {
                             playerHealthPoints -= 10;
+                            hud.updateHP(playerHealthPoints);
                         }
                         System.out.println(points);
                         System.out.println(currentTime);
@@ -187,7 +194,6 @@ public class PlayScreen implements Screen {
         int yPos = (int) pos.y;
         System.out.println("X-POS: " + xPos);
         System.out.println("Y-POS: " + yPos);
-
         Enemy enemy = new Enemy(xPos, yPos, TimeUtils.millis());
         enemies.add(enemy);
     }
@@ -195,7 +201,7 @@ public class PlayScreen implements Screen {
     private class HealthBar {
         private Sprite healthBarBG;
         private Sprite healthBarFG;
-        private final short buffer = 20;
+//        private final short buffer = 30;
 
         public HealthBar(Texture healthBG, Texture healthFG) {
 

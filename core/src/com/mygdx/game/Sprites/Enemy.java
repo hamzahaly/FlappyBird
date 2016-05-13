@@ -44,7 +44,7 @@ public class Enemy {
         private Sprite healthBarBG;
         private Sprite healthBarFG;
         private Enemy owner;
-        private final short buffer = 20;
+        private final short buffer = 10;
 
         public HealthBar(Enemy owner, Texture healthBG, Texture healthFG) {
             this.owner = owner;
@@ -53,20 +53,20 @@ public class Enemy {
             healthBarFG = new Sprite(healthFG);
 
             healthBarBG.setX(getPosition().x);
-            healthBarBG.setY(getPosition().y);
+            healthBarBG.setY(getPosition().y - buffer);
 
             healthBarFG.setX(getPosition().x);
-            healthBarFG.setY(getPosition().y);
+            healthBarFG.setY(getPosition().y - buffer);
 
             healthBarFG.setOrigin(0, 0);
         }
 
         public void update() {
             healthBarBG.setX(getPosition().x);
-            healthBarBG.setY(getPosition().y);
+            healthBarBG.setY(getPosition().y - buffer);
 
             healthBarFG.setX(getPosition().x);
-            healthBarFG.setY(getPosition().y);
+            healthBarFG.setY(getPosition().y - buffer);
 
             healthBarFG.setScale(owner.health / (float) owner.maxHealth, 1f);
         }
