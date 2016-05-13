@@ -53,7 +53,7 @@ public class Hud {
         healthPoints = new Label("HP", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
         failedHits = new Label("Success", new Label.LabelStyle(new BitmapFont(), Color.BLACK));
         scoreLabelTxt = new Label(String.format("%06d", score), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
-        healthPointsTxt = new Label(String.format("%03d", health), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
+        healthPointsTxt = new Label(String.format("150/" + "%03d", health), new Label.LabelStyle(new BitmapFont(), Color.BLACK));
 
 
         table.add(scoreLabel).expandX();
@@ -73,7 +73,7 @@ public class Hud {
 
     public void updateHP(int value) {
         health = value;
-        healthPointsTxt.setText(String.format("%03d", health));
+        healthPointsTxt.setText("150/" + String.format("%03d", health));
     }
 
     public void update(float dt) {

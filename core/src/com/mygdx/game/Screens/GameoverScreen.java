@@ -15,16 +15,11 @@ public class GameoverScreen implements Screen {
     private FlappyDemo game;
     private Texture background;
     private Texture gameover;
-//    private OrthographicCamera gamecam;
-//    private Viewport gameport;
 
     public GameoverScreen(FlappyDemo game) {
         this.game = game;
         background = new Texture("bg.png");
         gameover = new Texture("gameover.png");
-//        gamecam = new OrthographicCamera();
-//        gameport = new FitViewport(800, 480, gamecam);
-
     }
 
     public void handleInput() {
