@@ -172,7 +172,7 @@ public class PlayScreen implements Screen {
 
     private void spawnEnemy() {
         System.out.println("size: " + spawnArray.getSize());
-        int r = MathUtils.random(0, 30);
+        int r = MathUtils.random(0, 20);
         Vector3 pos = spawnArray.getPosition(r);
         int xPos = (int) pos.x;
         int yPos = (int) pos.y;
