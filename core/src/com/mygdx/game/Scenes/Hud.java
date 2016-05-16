@@ -32,7 +32,7 @@ public class Hud {
     public Hud(SpriteBatch batch) {
         score = 0;
         health = 150;
-        viewport = new FitViewport(FlappyDemo.HEIGHT / 2 , FlappyDemo.WIDTH / 2, new OrthographicCamera());
+        viewport = new FitViewport(FlappyDemo.WIDTH / 2 , FlappyDemo.HEIGHT / 2, new OrthographicCamera());
         stage = new Stage(viewport, batch);
 
 //        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("name_of_your_font_file.ttf"));

@@ -39,7 +39,8 @@ public class PlayScreen implements Screen {
     private Hud hud;
     private int enemiesSize;
     private int perfectHits;
-
+    private int hits;
+    private int failedHits;
 
     public PlayScreen(FlappyDemo game) {
         this.game = game;
@@ -107,6 +108,7 @@ public class PlayScreen implements Screen {
             if (TimeUtils.millis() - enemy.getSpawnTime() >= 7000) {
                 playerHealthPoints -= 20;
                 hud.updateHP(playerHealthPoints);
+                failedHits++;
                 iterator.remove();
             }
 
@@ -127,6 +129,7 @@ public class PlayScreen implements Screen {
                 if ((x >= enemyWidth && x <= enemyWidthEnd) && (y >= enemyHeight && y <= enemyHeightEnd)) {
                     // Can add damage to enemy class.
                     // Can add health which correlates to time to enemy class
+                    // This if never passes.
                     if (timePassed >= 7000) {
                         System.out.println(points);
                         System.out.println(currentTime);
@@ -154,6 +157,7 @@ public class PlayScreen implements Screen {
                         System.out.println(currentTime - enemy.getSpawnTime());
                         System.out.println("You touched the enemy before 7 seconds of spawning");
                         hud.addScore(points);
+                        hits++;
                         iterator.remove();
                     }
 
@@ -161,8 +165,11 @@ public class PlayScreen implements Screen {
             }
         }
         if (playerHealthPoints <= 0) {
+            game.setScreen(new GameoverScreen(game, points, hits, perfectHits, failedHits));
+            perfectHits = 0;
+            hits = 0;
+            failedHits = 0;
             points = 0;
-            game.setScreen(new GameoverScreen(game));
         }
     }
 
@@ -194,6 +201,16 @@ public class PlayScreen implements Screen {
         int yPos = (int) pos.y;
         System.out.println("X-POS: " + xPos);
         System.out.println("Y-POS: " + yPos);
+        for (Enemy enemy: enemies) {
+            Vector3 curPos = enemy.getPosition();
+            if (curPos.x == pos.x  || curPos.y == pos.y) {
+                System.out.println("Dupe");
+                r = MathUtils.random(0, 34);
+                pos = spawnArray.getPosition(r);
+                xPos = (int) pos.x;
+                yPos = (int) pos.y;
+            }
+        }
         Enemy enemy = new Enemy(xPos, yPos, TimeUtils.millis());
         enemies.add(enemy);
     }
@@ -239,6 +256,8 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
+        hud.dispose();
+        background.dispose();
 
     }
 }

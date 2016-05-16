@@ -53,20 +53,20 @@ public class Enemy {
             healthBarFG = new Sprite(healthFG);
 
             healthBarBG.setX(getPosition().x);
-            healthBarBG.setY(getPosition().y - buffer);
+            healthBarBG.setY(getPosition().y);
 
             healthBarFG.setX(getPosition().x);
-            healthBarFG.setY(getPosition().y - buffer);
+            healthBarFG.setY(getPosition().y);
 
             healthBarFG.setOrigin(0, 0);
         }
 
         public void update() {
             healthBarBG.setX(getPosition().x);
-            healthBarBG.setY(getPosition().y - buffer);
+            healthBarBG.setY(getPosition().y);
 
             healthBarFG.setX(getPosition().x);
-            healthBarFG.setY(getPosition().y - buffer);
+            healthBarFG.setY(getPosition().y);
 
             healthBarFG.setScale(owner.health / (float) owner.maxHealth, 1f);
         }

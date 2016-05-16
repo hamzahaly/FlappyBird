@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.FlappyDemo;
+import com.mygdx.game.Scenes.GameoverHud;
 
 /**
  * Created by iguest on 5/11/16.
@@ -15,9 +16,11 @@ public class GameoverScreen implements Screen {
     private FlappyDemo game;
     private Texture background;
     private Texture gameover;
+    private GameoverHud gameoverhud;
 
-    public GameoverScreen(FlappyDemo game) {
+    public GameoverScreen(FlappyDemo game, int score, int hits, int perfectHits, int failedHits) {
         this.game = game;
+        gameoverhud = new GameoverHud(score, hits, perfectHits, failedHits, game.batch);
         background = new Texture("bg.png");
         gameover = new Texture("gameover.png");
     }
@@ -41,10 +44,14 @@ public class GameoverScreen implements Screen {
     @Override
     public void render(float delta) {
         update();
+        game.batch.setProjectionMatrix(gameoverhud.stage.getCamera().combined);
         game.batch.begin();
         game.batch.draw(background, 0, 0);
-        game.batch.draw(gameover, (FlappyDemo.WIDTH / 4) - (gameover.getWidth() / 2), FlappyDemo.HEIGHT / 4);
+        game.batch.draw(gameover, (FlappyDemo.WIDTH / 4) - (gameover.getWidth() / 2), FlappyDemo.HEIGHT / 3);
         game.batch.end();
+        gameoverhud.stage.draw();
+
+
     }
 
     @Override
